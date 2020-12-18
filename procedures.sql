@@ -157,3 +157,24 @@ BEGIN
     
 END;
 /
+
+
+
+
+CREATE OR REPLACE PROCEDURE video_to_json(a_idvideo number)
+IS
+BEGIN
+    SELECT 
+        JSON_OBJECT(
+            'id_video', idVideo, 
+            'id_categorie', idCategory, 
+            'video_name', videoName, 
+            'description', description, 
+            'duree', duration, 
+            'origine', countryOrigin,
+            'multi_langue', multilanguage,
+            'format', imageFormat
+        ) AS json
+    FROM VIDEO WHERE idVideo = a_idvideo;
+END;
+/
