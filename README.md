@@ -41,5 +41,11 @@ Une variable globale est incrémentée à chaque fois qu'un utilisateur lance un
 ## Procédures et fonctions PL/SQL
 
 #### 1) Définir une fonction qui convertit au format json les informations d’une vidéo.
+Fait avec JSON_OBJECT()
+
 #### 2) Définir une procédure qui généra un texte initial de la newsletter en y ajoutant la liste detoute les sortie de la semaine.
+Fonctionne avec un curseur sur la table des nouvelles videos puis on concatene le resultat dans le string sous forme d'une liste.
+
 #### 3) Générer la liste des vidéos populaires, conseillé pour un utilisateur, c’est à dire fonction descatégories de vidéos qu’il suit.
+On utilise 2 curseur : un curseur sur les categories apppreciees et un curseur sur les videos populaires.
+On boucle sur une double boucle pour trouver les videos populaires dans les catégories appréciées.
