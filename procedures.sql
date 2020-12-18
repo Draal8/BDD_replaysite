@@ -1,3 +1,5 @@
+set serveroutput on
+
 CREATE OR REPLACE PROCEDURE liker(utilisateur number, video number)
 IS
 	p_compteur_like INT;
