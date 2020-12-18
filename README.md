@@ -22,21 +22,24 @@ On conisdère que :
 Un utilisateur peut like/unlike les vidéos archivées (=suprimées). 
 Un programme (= émission) peut reste visible même avec 0 episodes en ligne.
 
-```shell
 La suppression d'une vidéo entraîne : 
-
-PROGRAMME.nbepisodes -= 1
-
+```shell
 DELETE VIDEOS
 ADD ARCHIVES
 
-DELETE VIDEOLINK
-ADD ARCHIVESLINK
+DELETE VIDEO_LINK
+ADD ARCHIVES_LINK
 
 DELETE BROADCAST
-ADD ARCHIVESBROADCAST
+ADD ARCHIVES_BROADCAST
 ```
 
 #### 4) Afin de limiter le spam de visionnage, un utilisateur ne pourra pas lancer plus de  3visionnages par minutes.
 C'est aussi une procédure qui sert de "bouton" c'est à dire que la 
 Une variable globale est incrémentée à chaque fois qu'un utilisateur lance une vidéo, si il est dans la limite des 3 minutes.
+
+## Procédures et fonctions PL/SQL
+
+#### 1) Définir une fonction qui convertit au format json les informations d’une vidéo.
+#### 2) Définir une procédure qui généra un texte initial de la newsletter en y ajoutant la liste detoute les sortie de la semaine.
+#### 3) Générer la liste des vidéos populaires, conseillé pour un utilisateur, c’est à dire fonction descatégories de vidéos qu’il suit.
