@@ -137,6 +137,7 @@ CREATE TABLE ARCHIVES
 (
 	idArchived number(32) PRIMARY KEY,
 	idProgram number(8),
+    idCategory number(8),
 	videoName varchar2(100) NOT NULL,
 	description varchar2(1000),
 	countryOrigin varchar2(85),
