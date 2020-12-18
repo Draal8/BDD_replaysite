@@ -1,5 +1,10 @@
 # RAPPORT PARTIE 2 BDD
 
+## Ajouts
+- FICHIER : procedures.sql qui **contient les contraintes, procédures de la PARTIE 2 du rendu**.
+- Ajout dans la table  REGISTERED_USER d'un compteur de vidéos en favoris.
+- Quelques renommages dans les tables, rien qui ne mérite d'être précisé ici. 
+
 ## Contraintes d'intégrité
 REMARQUE : Les contraintes d'intégrité sont codée à l'aide de procédure et non de triggers.
 On considère que la modification d'une valeur ne sera induite que par l'appel d'une fonction.
