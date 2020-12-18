@@ -67,13 +67,13 @@ INSERT INTO VIDEO_LINK VALUES ( 'https://www.pornhub.com/view_video.php?viewkey=
 commit;
 
 --4
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Mail', 'You''Ve Got', 'mail@nomdomaine.fr', DATE '1998-12-18', 'Usa', 1);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Bestwaifu', 'Rem', 'rem@bestwaifu.jp', DATE '2002-02-02', 'Japon', 0);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Remplircesfichiers', 'C''Estrelou', 'jen@imarre.fr', DATE '2020-10-04', 'France', 0);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Frey', 'Gabriel', 'gabrielFrey@unistra.fr', DATE '1982-06-24', 'France', 1);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Gitgud', 'User', 'user@mail.fr', DATE '1901-01-01', 'Allemagne', 0);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Greta', 'Thunberg', 'gt@ecologie.fr', DATE '2003-01-03', 'Allemagne', 0);
-INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Unmonsieur', 'Avecunemoustache', 'lespiresheures@notrehistoire.com', DATE '1934-08-02', 'Allemagne', 0);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Mail', 'You''Ve Got', 'mail@nomdomaine.fr', DATE '1998-12-18', 'Usa', 5, 1);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Bestwaifu', 'Rem', 'rem@bestwaifu.jp', DATE '2002-02-02', 'Japon', 7, 0);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Remplircesfichiers', 'C''Estrelou', 'jen@imarre.fr', DATE '2020-10-04', 'France', 0, 0);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Frey', 'Gabriel', 'gabrielFrey@unistra.fr', DATE '1982-06-24', 'France', 2, 1);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Gitgud', 'User', 'user@mail.fr', DATE '1901-01-01', 'Allemagne', 4, 0);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Greta', 'Thunberg', 'gt@ecologie.fr', DATE '2003-01-03', 'Allemagne', 0, 0);
+INSERT INTO REGISTERED_USER VALUES ( seq_usr.nextval, 'Unmonsieur', 'Avecunemoustache', 'lespiresheures@notrehistoire.com', DATE '1934-08-02', 'Allemagne', 0, 0);
 commit;
 
 --5

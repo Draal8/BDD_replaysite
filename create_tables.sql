@@ -37,9 +37,11 @@ CREATE TABLE REGISTERED_USER
 	mail varchar2(100) NOT NULL,
 	birthDate date NOT NULL,
 	country varchar2(40) NOT NULL,
+	nbLike number(8) NOT NULL,
 	subscribedNews number(1) NOT NULL,
 	CONSTRAINT chk_country CHECK (country = INITCAP(country)),
 	CONSTRAINT chk_bool_subscribedNews CHECK (subscribedNews IN (1,0)),
+	CONSTRAINT chk_nbLike CHECK ((nbLike >= 0) AND (nbLike <= 300)),
 	CONSTRAINT chk_nomcase CHECK (
 		lastName = INITCAP(lastName) AND
 		firstName = INITCAP(firstName)
