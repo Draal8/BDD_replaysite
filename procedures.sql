@@ -1,5 +1,10 @@
 set serveroutput on
 
+-----------------------------------------------------------------
+--				CONTRAINTES D'INTEGRITE
+-----------------------------------------------------------------
+
+--Procedure a bind au bouton pour liker une video
 CREATE OR REPLACE PROCEDURE liker(utilisateur number, video number)
 IS
 	p_compteur_like INT;
@@ -34,7 +39,8 @@ BEGIN
 END;
 /
 
---AVEC CURSEUR
+
+--archivage d'une video AVEC CURSEUR
 CREATE OR REPLACE PROCEDURE enlever(a_idvideo number)
 IS
     v_id_program PROGRAM.idProgram%TYPE;
@@ -92,9 +98,7 @@ END;
 /
 
 
-
-
---SANS CURSEUR
+--archivage d'une video SANS CURSEUR
 CREATE OR REPLACE PROCEDURE enlever_video(a_idvideo number)
 IS
     
@@ -159,8 +163,70 @@ END;
 /
 
 
+--hors des questions demandées mais en lien avec la question suivante
+--Trigger qui incremente le nombre de vues dans watch_count
+CREATE OR REPLACE TRIGGER TR_user_watch
+BEFORE INSERT
+ON WATCH_HISTORY
+FOR EACH ROW
+DECLARE
+	cont INTEGER;
+	dat DATE;
+BEGIN
+	dat := current_date;
+	
+	--test si l'entree pour ajd existe => evite les plantages
+	IF EXIST( SELECT * FROM WATCH_COUNT Wc
+	WHERE Wc.idVideo = :new.idVideo AND Wc.watchDay = dat)
+	THEN
+		--on trouve le compte actuel
+		SELECT dayTotal into cont
+		FROM WATCH_COUNT Wc
+		WHERE Wc.idVideo = :new.idVideo AND Wc.watchDay = dat;
+		
+		--et on l'ajoute en incrementant
+		UPDATE WATCH_COUNT Wc2	SET dayTotal = cont+1
+		WHERE Wc2.idVideo = :new.idVideo AND Wc2.watchDay = dat;
+	ELSE
+		--on créé l'entrée sinon
+		INSERT INTO WATCH_COUNT VALUES (:new.idVideo, dat, :new.idUser);
+	END IF;
+END;
+/
 
 
+--Procedure a lier sur le bouton play et qui s'occupe du spam de visionnages
+nb_vid = 0;
+timestp = current_timestamp - 1; --minus 1 day
+
+CREATE OR REPLACE PROCEDURE PR_play(idVideo INTEGER, idUser INTEGER)
+IS
+	
+BEGIN
+	IF (timestp - current_timestamp < interval '1' minute)
+	THEN
+		IF nb_vid < 3
+		THEN
+			INSERT INTO WATCH_HISTORY VALUES (idUser, idVideo, current_date);
+			--trigger user watch
+		
+		ELSE
+			DBMS_OUTPUT.PUT_LINE('Vous ne pouvez pas regarder plus de 3 videos en l''espace d''une minute');
+		END IF;
+	ELSE
+		nb_vid = 1;
+		INSERT INTO WATCH_HISTORY VALUES (idUser, idVideo, current_date);
+			--trigger user watch
+	END IF;
+END;
+/
+
+
+-----------------------------------------------------------------
+--				PROCEDURE et FONCTIONS
+-----------------------------------------------------------------
+
+--convertit les infos d'une video au format JSON
 CREATE OR REPLACE PROCEDURE video_to_json(a_idvideo number)
 IS
 BEGIN
@@ -178,3 +244,66 @@ BEGIN
     FROM VIDEO WHERE idVideo = a_idvideo;
 END;
 /
+
+
+--Generateur de newsletter
+CREATE OR REPLACE FUNCTION F_newsletter
+RETURN CHAR
+IS
+	--curseur sur la table des nouvelles videos
+	CURSOR news_curs IS
+		SELECT * FROM VIDEO
+		NATURAL JOIN BROADCAST
+		WHERE CURRENT_TIMESTAMP-uploadDate >= interval '7' day;
+	news_row news_curs%ROWTYPE;
+	retour CHAR;
+BEGIN
+	retour := 'Voici les nouvelles videos sorties cette semaine qui pourraient vous intéresser :\n';
+	
+	FOR news_row IN news_curs
+	LOOP
+		--on concatene le resultat dans le string sous forme d'une liste
+		retour := retour || news_row.videoName;
+		retour := retour || '\n';
+	END LOOP;
+	
+	RETURN retour;
+END;
+/
+
+
+--Generer la liste des videos populaires parmis les categories apreciees
+CREATE OR REPLACE FUNCTION F_fav (idUser INTEGER)
+RETURN CHAR
+IS
+	--curseur sur les categories apppreciees
+	CURSOR cat_curs IS
+		SELECT * FROM REGISTERED_USER R
+		NATURAL JOIN CATEGORY_INTERESTED
+		WHERE R.idUser = idUser;
+	cat_row cat_curs%ROWTYPE;
+	--curseur sur les videos populaires
+	CURSOR pop_curs IS
+		SELECT * FROM RECOMMENDATIONS_POPULAR;
+	pop_row pop_curs%ROWTYPE;
+	retour CHAR;
+BEGIN
+	retour := 'Videos populaires dans les catégories qui vous intéressent :\n';
+	
+	--doubles boucle pour trouver les videos populaires dans les cat appreciees
+	FOR cat_row IN cat_curs
+	LOOP
+		FOR pop_row IN pop_curs
+		LOOP
+			IF (cat_row.idCategory = pop_row.idCategory)
+			THEN
+				--on concatene le resultat dans le string sous forme d'une liste
+				retour := retour || pop_row.videoName;
+				retour := retour || '\n';
+			END IF;
+		END LOOP;
+	END LOOP;
+	RETURN retour;
+END;
+/
+
